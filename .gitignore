@@ -8,7 +8,7 @@
 *.iws
 
 # Java WAR directories
-WEB-INF/
+#WEB-INF/
 
 # General files
 *.class
@@ -16,9 +16,9 @@ WEB-INF/
 *.exe
 *.o
 *.so
-*.html
+#*.html
 # ignore dev since each of its subdirectories is a unique git repository.
-dev/**/*
+#dev/**/*
 build/**/*
 
 # Tex files

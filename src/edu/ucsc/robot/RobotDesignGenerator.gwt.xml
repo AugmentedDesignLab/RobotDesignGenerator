@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='robotdesigngenerator'>
+<module rename-to='RobotDesignGenerator'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
 
@@ -18,15 +18,14 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
-  <source path='shared'/>
 
-<inherits name="com.akjava.gwt.html5.Html5widget"/>
+  <inherits name="com.akjava.gwt.html5.Html5widget"/>
 
-<!-- <inherits name="com.akjava.gwt.lib.Commons"/> -->
-<inherits name="com.akjava.bvh.Bvh"/>
+  <!-- <inherits name="com.akjava.gwt.lib.Commons"/> -->
+  <inherits name="com.akjava.bvh.Bvh"/>
 
-<!-- <inherits name="com.akjava.gwt.stats.Stats"/>  -->
-<inherits name="com.akjava.gwt.three.Three"/>
+  <!-- <inherits name="com.akjava.gwt.stats.Stats"/>  -->
+  <inherits name="com.akjava.gwt.three.Three"/>
 
 
 </module>

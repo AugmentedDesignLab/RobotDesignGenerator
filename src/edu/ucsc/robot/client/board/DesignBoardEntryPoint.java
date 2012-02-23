@@ -17,8 +17,7 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
  *
  */
 public abstract class DesignBoardEntryPoint extends BoardEntryPoint {
-  private static final int DEFAULT_ZOOM             = 10;
-  private static final int MIN_CAMERA               = 5;
+  private static final int MIN_CAMERA   = 5;
 
   
   protected Camera            camera;
@@ -30,7 +29,7 @@ public abstract class DesignBoardEntryPoint extends BoardEntryPoint {
   protected int               mouseDownX;
   protected int               mouseDownY;
   protected long              mouseLast;
-  private   int               zoom;
+  protected ZoomingRecord     zooming;
 
   
   /**
@@ -47,6 +46,7 @@ public abstract class DesignBoardEntryPoint extends BoardEntryPoint {
   
   @Override public void initialize(WebGLRenderer renderer, int width, int height){
     orientation   = new CameraOrientation();
+    zooming       = new ZoomingRecord();
     screenWidth   = width;
     screenHeight  = height;
     
@@ -70,14 +70,14 @@ public abstract class DesignBoardEntryPoint extends BoardEntryPoint {
     if(event.isShiftKeyDown()) { onMouseWheelWithShiftKey(event.getDeltaY()); }
     else {
       final long currentTime = System.currentTimeMillis();
-      if(mouseLast + 100 > currentTime) { zoom *= 2;            }
-      else                              { zoom  = DEFAULT_ZOOM; }
+      if(mouseLast + 100 > currentTime) { zooming.update(zooming.getZoomValue() * 2); }
+      else                              { zooming.restart();                          }
       
-      int onZ = orientation.cameraZ + event.getDeltaY() * zoom;
+      int onZ = orientation.getCameraZ() + event.getDeltaY() * zooming.getZoomValue();
       onZ     = Math.max(MIN_CAMERA, onZ);
       onZ     = Math.min(4000, onZ);
       
-      orientation.cameraZ = onZ;
+      orientation.setCameraZ(onZ);
       mouseLast           = currentTime;
     }
   }
@@ -119,23 +119,13 @@ public abstract class DesignBoardEntryPoint extends BoardEntryPoint {
     
     beforeUpdate(renderer);
     
-    final int cameraX = orientation.cameraX;
-    final int cameraY = orientation.cameraY;
-    final int cameraZ = orientation.cameraZ;
+    final int cameraX = orientation.getCameraX();
+    final int cameraY = orientation.getCameraY();
+    final int cameraZ = orientation.getCameraZ();
     
     camera.getPosition().set(cameraX, cameraY, cameraZ);
     renderer.render(scene, camera);    
   }
-  
-  /**
-   * A record class to capture the orientation of the camera.
-   * @author Huascar A. Sanchez
-   *
-   */
-  static class CameraOrientation {
-    int     cameraX; 
-    int     cameraY; 
-    int     cameraZ = 100;
-  }
+ 
 
 }
