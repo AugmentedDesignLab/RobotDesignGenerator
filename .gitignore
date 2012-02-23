@@ -8,7 +8,10 @@
 *.iws
 
 # Java WAR directories
-#WEB-INF/
+WEB-INF/classes
+WEB-INF/deploy
+war/robotdesigngenerator
+
 
 # General files
 *.class
