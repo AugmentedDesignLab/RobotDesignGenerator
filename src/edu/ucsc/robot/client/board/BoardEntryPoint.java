@@ -228,7 +228,7 @@ public abstract class BoardEntryPoint implements EntryPoint {
   }
 
   /**
-   * sets up the WebGLCanvas object by assiging the appropriate Mouse Listeners and Handlers.
+   * sets up the WebGLCanvas object by assigning the appropriate Mouse Listeners and Handlers.
    */
   private void setupWebGLCanvas() {
     canvas.setClearColorHex(0);
