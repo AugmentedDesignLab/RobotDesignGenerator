@@ -226,7 +226,10 @@ public class MainScreen implements EntryPoint{
 		bottomPanel = new PopupPanel();
 		bottomPanel.setVisible(true);
 		bottomPanel.setSize("650px", "40px");
-		final VerticalPanel main = new VerticalPanel();
+		HorizontalPanel main = new HorizontalPanel();
+		main.add(new Button("Generate"));
+		main.add(new Button("Print 3D"));
+		main.add(new Button("Help"));
 		bottomPanel.add(main);
 		bottomPanel.show();
 		Util.leftBottom(bottomPanel);
