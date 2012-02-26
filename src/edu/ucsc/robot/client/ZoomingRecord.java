@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.ucsc.robot.client.board;
+package edu.ucsc.robot.client;
 
 /**
  * A record class to capture the zooming in/out values of the camera.
