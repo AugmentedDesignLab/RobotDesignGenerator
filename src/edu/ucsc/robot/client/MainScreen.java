@@ -164,7 +164,7 @@ public class MainScreen implements EntryPoint{
 	private void setupDialogRoot() {
 		VerticalPanel dialogRoot = new VerticalPanel();
 		dialogRoot.setSpacing(2);
-		final Label label = new Label("Control");
+		Label label = new Label("Control");
 		label.setStyleName("title");
 		dialog.add(dialogRoot);
 		dialogRoot.add(label);
@@ -199,6 +199,8 @@ public class MainScreen implements EntryPoint{
 				showPlayer();
 			}
 		});
+		
+		dialogRoot.add(ChassisPanel.getInstance());
 	}
 
 	public void createPlayer(Panel parent) {
