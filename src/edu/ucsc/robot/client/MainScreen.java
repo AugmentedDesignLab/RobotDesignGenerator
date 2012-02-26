@@ -201,6 +201,7 @@ public class MainScreen implements EntryPoint{
 		});
 		
 		dialogRoot.add(ChassisPanel.getInstance());
+		dialogRoot.add(WheelPanel.getInstance());
 	}
 
 	public void createPlayer(Panel parent) {

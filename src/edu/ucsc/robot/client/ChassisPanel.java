@@ -4,11 +4,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-
+ 
 public class ChassisPanel extends FlexTable {
 	private static ChassisPanel instance;
 	private ChassisPanel(){
-		setText(0, 0, "Chassis Style");
+		setText(0, 0, "Chassis Styles");
 		FlexCellFormatter formatter = getFlexCellFormatter();
 		formatter.setColSpan(0, 0, 3);
 		formatter.setAlignment(0, 0, HasAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
