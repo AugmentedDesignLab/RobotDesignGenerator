@@ -34,7 +34,7 @@ public class WorkspacePanel extends FocusPanel implements RequiresResize, Provid
   public WorkspacePanel(VerticalPanel panel, Dashboard index){
     super(panel);
     this.index = index;
-    width      = index.getScreenWidth()  - 400;
+    width      = index.getScreenWidth()  - 350;
     height     = index.getScreenHeight() - 400;
     // In order to get rid of the FocusPanel's "annoying" border 
     // when hasFocus is set to true, I used CSS (outline: none)

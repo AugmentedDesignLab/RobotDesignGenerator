@@ -12,8 +12,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.ucsc.robot.util.Util;
-
 /**
  * a toolbox panel is a container where the {@link ChassisPanel}, {@link WheelPanel}, 
  * and {@code SensorPanel} will be placed.
@@ -93,12 +91,14 @@ public class ToolboxPanel extends PopupPanel {
   }
   
   public void displayOnRightTopCorner(){
-    show();
-    Util.rightTop(
-        this, 
-        index.getScreenWidth() - 250, 
-        index.getScreenHeight() - 700
-    );
+//    show();
+    setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        int left = (index.getScreenWidth() - offsetWidth) / 3 + 600;
+        int top = (index.getScreenHeight() - offsetHeight) / 3 - 150;
+        setPopupPosition(left, top);
+      }
+    });    
   }
   
   
@@ -116,11 +116,14 @@ public class ToolboxPanel extends PopupPanel {
     chassis.setVisible(false);
     wheel.setVisible(false);  
     hideHiddenButton();
-    Util.rightTop(
-        this, 
-        index.getScreenWidth()  - 250, 
-        index.getScreenHeight() - 700
-    );
+    setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        int left = (index.getScreenWidth() - offsetWidth) / 3 + 600;
+        int top = (index.getScreenHeight() - offsetHeight) / 3 - 150;
+        setPopupPosition(left, top);
+      }
+    });     
+
   }
   
   public void showHiddenButton(){

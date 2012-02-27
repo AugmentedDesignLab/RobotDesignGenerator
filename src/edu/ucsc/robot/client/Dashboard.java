@@ -45,7 +45,9 @@ public class Dashboard extends AbstractDashboard implements EntryPoint {
     // add workspace panel
     workspace = new WorkspacePanel(this);
     addComponent(workspace);
-     
+    
+    //addComponent(new BottomPanel());
+         
     toolbox = new ToolboxPanel(this);    
     toolbox.displayOnRightTopCorner();
 
