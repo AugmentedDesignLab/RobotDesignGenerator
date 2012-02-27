@@ -91,7 +91,6 @@ public class ToolboxPanel extends PopupPanel {
   }
   
   public void displayOnRightTopCorner(){
-//    show();
     setPopupPositionAndShow(new PopupPanel.PositionCallback() {
       public void setPosition(int offsetWidth, int offsetHeight) {
         int left = (index.getScreenWidth() - offsetWidth) / 3 + 600;

@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 public class WheelPanel extends FlexTable {
 	private static WheelPanel instance;
 	
+	// TODO (ZP) probably you should use the DisclosurePanel: http://examples.roughian.com/index.htm#Panels~DisclosurePanel 
 	private WheelPanel() {
 		setText(0, 0, "Wheel Styles");
 		FlexCellFormatter formatter = getFlexCellFormatter();
