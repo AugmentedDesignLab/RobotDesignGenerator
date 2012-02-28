@@ -1,9 +1,5 @@
-/**
- * 
- */
 package edu.ucsc.robot.client;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -12,12 +8,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * a toolbox panel is a container where the {@link ChassisPanel}, {@link WheelPanel}, 
- * and {@code SensorPanel} will be placed.
- * @author Huascar A. Sanchez
- *
- */
+import edu.ucsc.robot.client.handler.ToolboxInputHandler;
+
 public class ToolboxPanel extends PopupPanel {
   private final Dashboard     index;
   private final VerticalPanel root;
@@ -63,25 +55,10 @@ public class ToolboxPanel extends PopupPanel {
     root.add(chassis);
     root.add(wheel);   
     
-    addLabelClickHandler(new ClickHandler() {
-      
-      @Override
-      public void onClick(ClickEvent event) {
-        showPanels();
-      }
-     }
-    );
+    new ToolboxInputHandler(this);
     
-    addButtonClickHandler(new ClickHandler(){
-
-      @Override
-      public void onClick(ClickEvent event) {
-        hidePanels();
-      }
-      }
-    );      
   }
-    
+  
   public void addButtonClickHandler(ClickHandler handler){
     hideButton.addClickHandler(handler);
   }
@@ -131,6 +108,6 @@ public class ToolboxPanel extends PopupPanel {
   
   public void hideHiddenButton(){
     hideButton.setVisible(false);
-  }
+  }  
 
 }

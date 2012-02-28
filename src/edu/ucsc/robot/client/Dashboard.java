@@ -1,131 +1,128 @@
-/**
- * 
- */
 package edu.ucsc.robot.client;
 
 import com.akjava.gwt.three.client.THREE;
+import com.akjava.gwt.three.client.gwt.core.CameraControler;
 import com.akjava.gwt.three.client.renderers.WebGLRenderer;
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.akjava.gwt.three.client.ui.CameraMoveWidget;
+import com.akjava.gwt.three.client.ui.CameraRotationWidget;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-/**
- * This represents the Robot Design Generator Dashboard...
- * @author Huascar A. Sanchez
- *
- */
-public class Dashboard extends AbstractDashboard implements EntryPoint {
+import edu.ucsc.robot.client.handler.DashboardInputHandler;
+import edu.ucsc.robot.client.handler.DeferredExecutionHandler;
+
+public class Dashboard extends Composite {
+
+  private static final String NOTHING = "";
+
+  private HTMLPanel widget;
+  private CameraMoveWidget cameraMove;
+  private CameraRotationWidget cameraRotation;
+  private CameraControler controller;
+
   private int width;
   private int height;
-  
-  private final WebGLRenderer  render;
+
+  private final WebGLRenderer render;
   private final WorkspacePanel workspace;
-  private final ToolboxPanel   toolbox;
-  
-  /**
-   * default constructor.
-   */
-  public Dashboard(){
-    super();
-    
-    width  = Window.getClientWidth();
-    height = Window.getClientHeight();     
-    
-    // add info panel 
+  private final ToolboxPanel toolbox;
+
+  public Dashboard() {
+    controller = new CameraControler();
+    width = Window.getClientWidth();
+    height = Window.getClientHeight();
+
+    widget = new HTMLPanel(NOTHING);
+    widget.setSize("100%", "100%");
+
+    setGlobalCamera();
+    setGlobalCameraRotation();
+
+    initWidget(widget);
+
+    // add info panel
     addComponent(new InfoPanel());
-    
+
     // set up renderer (important)
     render = THREE.WebGLRenderer();
     render.setSize(width, height);
-    
+
     // add workspace panel
     workspace = new WorkspacePanel(this);
     addComponent(workspace);
-    
-    //addComponent(new BottomPanel());
-         
-    toolbox = new ToolboxPanel(this);    
+    new DashboardInputHandler(this);
+
+    addComponent(new BottomPanel());
+
+    toolbox = new ToolboxPanel(this);
     toolbox.displayOnRightTopCorner();
 
+    new DeferredExecutionHandler(this);
   }
+  
   
   public static Dashboard getInstance(){
     return Installer.INSTANCE;
   }
-  
-  @Override
-  public void onModuleLoad() {
-    final Dashboard dashboard = getInstance();
-    RootPanel.get().add(dashboard);
+
+  protected void addComponent(Widget component) {
+    widget.add(component);
   }
-  
-  public WebGLRenderer getRenderer(){
-    return render;
+
+  public CameraControler getController() {
+    return controller;
   }
-  
-  public int getScreenWidth(){
-    return width;
+
+  public CameraMoveWidget getGlobalCamera() {
+    return cameraMove;
   }
-  
-  public int getScreenHeight(){
+
+  public CameraRotationWidget getGlobalCameraRotation() {
+    return cameraRotation;
+  }
+
+  public Widget getMainWidget() {
+    return getWidget();
+  }
+
+  public int getScreenHeight() {
     return height;
   }
-  
-  public WorkspacePanel getWorkspacePanel(){
-    return workspace;
+
+  public int getScreenWidth() {
+    return width;
   }
-  
-  public ToolboxPanel getToolbox(){
+
+  public ToolboxPanel getToolbox() {
     return toolbox;
   }
-  
-  public void setDimensions(int width, int height){
-    this.width  = width;
+
+  public WebGLRenderer getWebGlRenderer() {
+    return render;
+  }
+
+  public WorkspacePanel getWorkspace() {
+    return workspace;
+  }
+
+  public void setDimensions(int width, int height) {
+    this.width = width;
     this.height = height;
   }
-  
-  @Override
-  public void onMouseDown(MouseDownEvent event) {
-    super.onMouseDown(event);
-    if(event.getNativeButton() == NativeEvent.BUTTON_MIDDLE){
-      return;
-    }
-    
-    final int x = event.getX();
-    final int y = event.getY();
-    
-    workspace.selectObjectOnPlane(x, y);       
+
+  private void setGlobalCamera() {
+    // set up global camera
+    cameraMove = new CameraMoveWidget();
+    cameraMove.setVisible(false);// useless
   }
 
-
-  @Override
-  public void onMouseMove(MouseMoveEvent event) {
-    super.onMouseMove(event);
-    
-    if(event.getNativeButton() == NativeEvent.BUTTON_MIDDLE){
-      return;
-    }
-    
-    final int x = event.getX();
-    final int y = event.getY();
-    
-    workspace.dragSelectedObject(x, y);    
+  private void setGlobalCameraRotation() {
+    cameraRotation = new CameraRotationWidget();
+    cameraRotation.setVisible(false);// useless
   }
   
-
-  @Override
-  public void onMouseOut(MouseOutEvent event) {
-    super.onMouseOut(event);
-    workspace.unselectObjectOnPlane();
-  }
-  
-  
-
-
   /**
    * A trick that give us a lazy loaded and thread safe Dashboard singleton...
    * @author Huascar A. Sanchez

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * @author Huascar A. Sanchez
- *
+ * TODO refactor once layout is fixed...
  */
 public class BottomPanel extends VerticalPanel {
   private final HorizontalPanel buttons;
@@ -28,6 +28,7 @@ public class BottomPanel extends VerticalPanel {
     DOM.setStyleAttribute(getElement(), "backgroundColor", "#fff");
     DOM.setStyleAttribute(getElement(), "borderTop", "1px solid #ddd");
     DOM.setStyleAttribute(getElement(), "padding", "8px 10px");
+    DOM.setStyleAttribute(getElement(), "bottom", "5px");
     
     
     buttons = new HorizontalPanel();
@@ -57,5 +58,6 @@ public class BottomPanel extends VerticalPanel {
       }
     }));
   }
+   
 
 }
