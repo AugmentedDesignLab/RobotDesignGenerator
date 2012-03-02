@@ -27,10 +27,10 @@ public class WorkplaneRefreshHandler extends AbstractHandler<Dashboard>
 		scheduler.requestAnimationFrame(this);
 		CameraControler controller = getIndex().getController();
 		if(leftArrowKeyDown){
-			workplane.theta += 1;
+			workplane.theta -= 1;
 		}
 		if(rightArrowKeyDown){
-			workplane.theta -= 1;
+			workplane.theta += 1;
 		}
 		workplane.updateCameraPosition();
 

@@ -52,7 +52,7 @@ public class WorkplanePanel extends HTMLPanel {
 
 		this.radious = 100;
 		this.theta = 0;
-		this.phi = 0;
+		this.phi = 45;
 
 		this.scene = THREE.Scene();
 		this.projector = THREE.Projector();
@@ -64,7 +64,7 @@ public class WorkplanePanel extends HTMLPanel {
 		rootComponent = THREE.Object3D();
 		scene.add(rootComponent);
 
-		plane = THREE.Mesh(THREE.PlaneGeometry(50, 50, 20, 20), THREE
+		plane = THREE.Mesh(THREE.PlaneGeometry(50, 50, 10, 10), THREE
 				.MeshBasicMaterial().color(0x888888).wireFrame().build());
 
 		final int rotation = 1;
@@ -72,9 +72,8 @@ public class WorkplanePanel extends HTMLPanel {
 		final double angleChangeOnY = 0;
 		final double angleChangeOnZ = 126.0;
 
-		plane.setRotation(rotation * angleChangeOnX, angleChangeOnY / 2,
-				angleChangeOnZ);
-		plane.setPosition(0, -5, 0);
+		plane.setRotation(Math.PI/2, 0, 0);
+		plane.setPosition(0, 0, 0);
 		rootComponent.add(plane);
 
 		setupLights();
@@ -123,7 +122,6 @@ public class WorkplanePanel extends HTMLPanel {
 	}
 
 	private void setupCamera() {
-		camera.setTarget(0, 0, 0);
 		scene.add(camera);
 	}
 
@@ -135,6 +133,7 @@ public class WorkplanePanel extends HTMLPanel {
 				radious * Math.sin(phi * Math.PI / 360),
 				radious * Math.cos(theta * Math.PI / 360)
 						* Math.cos(phi * Math.PI / 360));
+		camera.lookAt(0, 0, 0);
 
 //		camera.getPosition().setY(camera.getPosition().getY() + 200);
 	}
