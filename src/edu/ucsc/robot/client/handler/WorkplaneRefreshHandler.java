@@ -1,44 +1,52 @@
 package edu.ucsc.robot.client.handler;
 
 import com.akjava.gwt.three.client.gwt.core.CameraControler;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 
 import edu.ucsc.robot.client.AbstractHandler;
 import edu.ucsc.robot.client.Dashboard;
 import edu.ucsc.robot.client.WorkplanePanel;
 
-public class WorkplaneRefreshHandler extends AbstractHandler<Dashboard> {
+public class WorkplaneRefreshHandler extends AbstractHandler<Dashboard>
+		implements AnimationCallback {
 
-  private final WorkplanePanel workplane;
+	private final WorkplanePanel workplane;
+	public boolean leftArrowKeyDown = false;
+	public boolean rightArrowKeyDown = false;
 
-  public WorkplaneRefreshHandler(Dashboard index, WorkplanePanel workplane) {
-    super(index);
-    this.workplane = workplane;
-    handle();
-  }
+	public WorkplaneRefreshHandler(Dashboard index, WorkplanePanel workplane) {
+		super(index);
+		this.workplane = workplane;
+		handle();
+	}
 
-  @Override
-  public void handle() {
-    new Timer(){
+	@Override
+	public void handle() {
+		AnimationScheduler scheduler = AnimationScheduler.get();
+		scheduler.requestAnimationFrame(this);
+		CameraControler controller = getIndex().getController();
+		if(leftArrowKeyDown){
+			workplane.theta += 1;
+		}
+		if(rightArrowKeyDown){
+			workplane.theta -= 1;
+		}
+		workplane.updateCameraPosition();
 
-      @Override
-      public void run() {
-        final CameraControler controller = getIndex().getController();
-        workplane.getCamera().setPosition(
-            controller.getPositionX(), 
-            controller.getPositionY(), 
-            controller.getPositionZ()
-        );
-        
-        workplane.getRootComponent().setRotation(
-            controller.getRadiantRotationX(), 
-            controller.getRadiantRotationY(), 
-            controller.getRadiantRotationZ()
-        );
-        
-        getIndex().getWebGlRenderer().render(workplane.getScene(), workplane.getCamera());
-        
-      }}.scheduleRepeating(1000/60);    
-  }
+		workplane.getRootComponent().setRotation(
+				controller.getRadiantRotationX(),
+				controller.getRadiantRotationY(),
+				controller.getRadiantRotationZ());
+
+		getIndex().getWebGlRenderer().render(workplane.getScene(),
+				workplane.getCamera());
+
+	}
+
+	@Override
+	public void execute(double timestamp) {
+		handle();
+	}
 
 }

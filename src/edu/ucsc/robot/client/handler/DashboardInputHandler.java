@@ -23,118 +23,144 @@ import com.google.gwt.user.client.DOM;
 
 import edu.ucsc.robot.client.AbstractHandler;
 import edu.ucsc.robot.client.Dashboard;
+import edu.ucsc.robot.client.WorkplanePanel;
+import edu.ucsc.robot.client.WorkspacePanel;
 
-public class DashboardInputHandler extends AbstractHandler <Dashboard> implements KeyDownHandler, 
-    KeyUpHandler, FocusHandler, KeyPressHandler, MouseDownHandler, MouseOutHandler, 
-    MouseMoveHandler, MouseWheelHandler, MouseUpHandler {
-  
-  private boolean  mouseDown;
-  private int      mouseDownX;
-  private int      mouseDownY;   
-  private boolean  isShiftDown; 
+public class DashboardInputHandler extends AbstractHandler<Dashboard> implements
+		KeyDownHandler, KeyUpHandler, FocusHandler, KeyPressHandler,
+		MouseDownHandler, MouseOutHandler, MouseMoveHandler, MouseWheelHandler,
+		MouseUpHandler {
 
-  public DashboardInputHandler(Dashboard index) {
-    super(index);
-    mouseDown   = false;
-    mouseDownX  = -1;
-    mouseDownY  = -1;  
-    isShiftDown = false;
-    
-    handle();
-    
-    
-  }
+	private boolean mouseDown;
+	private int mouseDownX;
+	private int mouseDownY;
+	private boolean isShiftDown;
+	private WorkspacePanel workspace;
+	private WorkplaneRefreshHandler refreshHandler;
 
-  @Override
-  public void handle() {
-    getIndex().getWorkspace().addKeyDownHandler(this);
-    getIndex().getWorkspace().addKeyPressHandler(this);
-    getIndex().getWorkspace().addKeyUpHandler(this);
-    getIndex().getWorkspace().addFocusHandler(this);
-    getIndex().getWorkspace().addMouseDownHandler(this);
-    getIndex().getWorkspace().addMouseOutHandler(this);
-    getIndex().getWorkspace().addMouseUpHandler(this);
-    getIndex().getWorkspace().addMouseMoveHandler(this);
-    getIndex().getWorkspace().addMouseWheelHandler(this);     
-  }
+	public DashboardInputHandler(Dashboard index) {
+		super(index);
+		mouseDown = false;
+		mouseDownX = -1;
+		mouseDownY = -1;
+		isShiftDown = false;
+		workspace = getIndex().getWorkspace();
+		refreshHandler = workspace.getWorkplane().refreshHandler;
 
-  @Override
-  public void onFocus(FocusEvent event) {
-    DOM.setStyleAttribute(getIndex().getMainWidget().getElement(), "border", "none"); 
-  }
+		handle();
 
-  @Override
-  public void onKeyDown(KeyDownEvent event) {
-    switch( event.getNativeKeyCode()) {
-      case 16: isShiftDown = true; break;
-    }
-  }
+	}
 
-  @Override
-  public void onKeyPress(KeyPressEvent event) {
-  }
+	@Override
+	public void handle() {
+		workspace.addKeyDownHandler(this);
+		workspace.addKeyPressHandler(this);
+		workspace.addKeyUpHandler(this);
+		workspace.addFocusHandler(this);
+		workspace.addMouseDownHandler(this);
+		workspace.addMouseOutHandler(this);
+		workspace.addMouseUpHandler(this);
+		workspace.addMouseMoveHandler(this);
+		workspace.addMouseWheelHandler(this);
+	}
 
-  @Override
-  public void onKeyUp(KeyUpEvent event) {
-    switch( event.getNativeKeyCode()) {
-      case 16: isShiftDown = false; break;
-    }
-  }
+	@Override
+	public void onFocus(FocusEvent event) {
+		DOM.setStyleAttribute(getIndex().getMainWidget().getElement(),
+				"border", "none");
+	}
 
-  @Override
-  public void onMouseDown(MouseDownEvent event) {
-    mouseDown   = true;
-    mouseDownX  = event.getX();
-    mouseDownY  = event.getY(); 
-    
-    if(event.getNativeButton() == NativeEvent.BUTTON_MIDDLE){
-      return;
-    }
-    
-    final int x = event.getX();
-    final int y = event.getY();
-    
-    // this is bad bad bad...but...after friday, I will fix it...
-    getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler().selectObjectOnPlane(x, y);       
-  }
+	@Override
+	public void onKeyDown(KeyDownEvent event) {
+		switch (event.getNativeKeyCode()) {
+		case 16:
+			isShiftDown = true;
+			break;
+		case 37:
+			refreshHandler.leftArrowKeyDown = true;
+			break;
+		case 39:
+			refreshHandler.rightArrowKeyDown = true;
+			break;
+		}
+	}
 
-  @Override
-  public void onMouseMove(MouseMoveEvent event) {
-    if(isShiftDown && mouseDown){
-      int diffX   = event.getX() - mouseDownX;
-      int diffY   = event.getY() - mouseDownY;
-      mouseDownX  = event.getX();
-      mouseDownY  = event.getY();
+	@Override
+	public void onKeyPress(KeyPressEvent event) {
+	}
 
-      getIndex().getController().incrementRotationX(diffY);
-      getIndex().getController().incrementRotationY(diffX);
-            
-    }
-    
-    if(event.getNativeButton() == NativeEvent.BUTTON_MIDDLE){
-      return;
-    }
-    
-    final int x = event.getX();
-    final int y = event.getY();
-    
-    getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler().dragSelectedObject(x, y);      
-  }
+	@Override
+	public void onKeyUp(KeyUpEvent event) {
+		switch (event.getNativeKeyCode()) {
+		case 16:
+			isShiftDown = false;
+			break;
+		case 37:
+			refreshHandler.leftArrowKeyDown = false;
+			break;
+		case 39:
+			refreshHandler.rightArrowKeyDown = false;
+			break;
+		}
+	}
 
-  @Override
-  public void onMouseOut(MouseOutEvent event) {
-    mouseDown = false; 
-    getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler().unselectObject();
-  }
+	@Override
+	public void onMouseDown(MouseDownEvent event) {
+		mouseDown = true;
+		mouseDownX = event.getX();
+		mouseDownY = event.getY();
 
-  @Override
-  public void onMouseUp(MouseUpEvent event) {
-    mouseDown = false; 
-  }
+		if (event.getNativeButton() == NativeEvent.BUTTON_MIDDLE) {
+			return;
+		}
 
-  @Override
-  public void onMouseWheel(MouseWheelEvent event) {
-    getIndex().getController().doMouseWheel(event.getDeltaY());
-  }
+		final int x = event.getX();
+		final int y = event.getY();
+
+		// this is bad bad bad...but...after friday, I will fix it...
+		getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler()
+				.selectObjectOnPlane(x, y);
+	}
+
+	@Override
+	public void onMouseMove(MouseMoveEvent event) {
+		if (isShiftDown && mouseDown) {
+			int diffX = event.getX() - mouseDownX;
+			int diffY = event.getY() - mouseDownY;
+			mouseDownX = event.getX();
+			mouseDownY = event.getY();
+
+			getIndex().getController().incrementRotationX(diffY);
+			getIndex().getController().incrementRotationY(diffX);
+
+		}
+
+		if (event.getNativeButton() == NativeEvent.BUTTON_MIDDLE) {
+			return;
+		}
+
+		final int x = event.getX();
+		final int y = event.getY();
+
+		getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler()
+				.dragSelectedObject(x, y);
+	}
+
+	@Override
+	public void onMouseOut(MouseOutEvent event) {
+		mouseDown = false;
+		getIndex().getWorkspace().getWorkplane().getObjectDraggringHandler()
+				.unselectObject();
+	}
+
+	@Override
+	public void onMouseUp(MouseUpEvent event) {
+		mouseDown = false;
+	}
+
+	@Override
+	public void onMouseWheel(MouseWheelEvent event) {
+		getIndex().getController().doMouseWheel(event.getDeltaY());
+	}
 
 }
